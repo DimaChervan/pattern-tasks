@@ -58,6 +58,7 @@ function findMaxDensity(table) {
 }
 
 function getDensityPercentage(density, max) {
+  if (max === 0) return 0;
   return Math.round((density * 100) / max);
 }
 // insertDensityPercentage and findMaxDensity might be combined into one function for optimization
@@ -103,13 +104,19 @@ function displayTable(strings) {
   }
 }
 
-function main() {
-  const table = parseCVS(data);
+function prepareTable(csv) {
+  const table = parseCVS(csv);
   const max = findMaxDensity(table);
   const tableWithPercent = insertDensityPercentage(table, max);
-  const sortedTable = sortTable(tableWithPercent);
-  const strings = formatTable(sortedTable);
-  displayTable(strings);
+  return sortTable(tableWithPercent);
 }
 
-main();
+export function processData(csv) {
+  const sortedTable = prepareTable(csv);
+  return formatTable(sortedTable);
+}
+
+export function main() {
+  const strings = processData(data);
+  displayTable(strings);
+}
